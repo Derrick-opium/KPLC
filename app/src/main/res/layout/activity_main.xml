@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/green"
+        android:text="DERRICK POWER"/>
+
+
+    <EditText
+        android:id="@+id/num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_marginTop="40dp"
+        android:hint="Enter meter num"/>
+
+    <EditText
+        android:id="@+id/amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_marginTop="40dp"
+        android:hint="Enter amount"/>
+
+    <Button
+        android:id="@+id/btnk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="130dp"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/csh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_marginTop="40dp" />
+    <EditText
+        android:id="@+id/tkn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_marginTop="40dp" />
+
+    <EditText
+        android:id="@+id/mtr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_marginTop="40dp" />
+
+
+    <Button
+        android:id="@+id/btncl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="clear"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="130dp"
+        android:textSize="20dp"/>
+
+
+
+</LinearLayout>
