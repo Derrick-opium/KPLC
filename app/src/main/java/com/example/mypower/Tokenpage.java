@@ -43,6 +43,10 @@ public class Tokenpage extends AppCompatActivity {
                 Toast.makeText(this, "Fill all spaces", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (getmeter .length()!=11){
+                Toast.makeText(this, "Meter number must be 11 digits ", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             double mio = Double.parseDouble(getmoney);
 
@@ -61,6 +65,7 @@ public class Tokenpage extends AppCompatActivity {
             Intent myintent=new Intent(Tokenpage.this,MainActivity.class);
             startActivity(myintent);
         });
+        //exports tokenpage methods  
         btnmessage.setOnClickListener(v -> {
             Intent intent = new Intent(Tokenpage.this, Message.class);
 
