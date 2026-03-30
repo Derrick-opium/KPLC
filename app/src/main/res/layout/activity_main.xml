@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/main1"
+    android:background="#0F1115"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="10dp">
 
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:text="Smart tech by wahome"
-            android:textColor="@color/white"
+            android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
     </Toolbar>
@@ -66,9 +67,11 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:weightSum="3"
                     android:padding="20dp">
                     <FrameLayout
                         android:layout_width="60dp"
+                        android:layout_weight="1"
                         android:layout_height="60dp"
                         android:background="@drawable/outline_ad_24">
 
@@ -113,7 +116,7 @@
                         android:layout_width="90dp"
                         android:layout_height="80dp"
                         android:layout_gravity="start"
-                        android:src="@drawable/vr"/>
+                        android:src="@drawable/hi"/>
 
                     <TextView
                         android:id="@+id/token"
@@ -129,7 +132,7 @@
                         android:layout_height="60dp"
                         android:layout_gravity="start"
 
-                        android:src="@drawable/po" />
+                        android:src="@drawable/tol" />
 
 
                     <TextView
@@ -174,9 +177,10 @@
                             app:cardElevation="6dp">
 
                             <TextView
+                                android:id="@+id/txtdepo"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Cleaning"
+                                android:text="Deposit token unit"
                                 android:textColor="#FFFFFF"
                                 android:textSize="16sp"
                                 android:gravity="center"/>
@@ -191,10 +195,11 @@
                             app:cardElevation="6dp">
 
                             <TextView
+                                android:id="@+id/txtshare"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="Plumbing"
+                                android:text="Share token unit"
                                 android:textColor="#FFFFFF"
                                 android:textSize="16sp" />
                         </com.google.android.material.card.MaterialCardView>
@@ -208,9 +213,10 @@
                             app:cardElevation="6dp">
 
                             <TextView
+                                android:id="@+id/txtview"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Electrical"
+                                android:text="View"
                                 android:textColor="#FFFFFF"
                                 android:textSize="16sp"
                                 android:gravity="center"/>
