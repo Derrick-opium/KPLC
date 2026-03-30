@@ -6,35 +6,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/main1"
+    android:background="#0F1115"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="10dp">
 
+
+
+
     <!-- Header -->
-    <LinearLayout
+    <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/yellow"
         android:id="@+id/headrl"
-        android:layout_marginBottom="20dp"
-        android:padding="20dp"
-        android:orientation="vertical">
+        android:layout_marginBottom="20dp">
+        
+        <ImageButton
+            android:id="@+id/btntoggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_menu_24"
+            android:background="@android:color/transparent"
+            android:padding="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
             android:text="Smart tech by wahome"
-            android:textColor="@color/white"
+            android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
-    </LinearLayout>
+    </Toolbar>
 
     <!-- Scrollable Content -->
     <ScrollView
@@ -64,9 +67,11 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:weightSum="3"
                     android:padding="20dp">
                     <FrameLayout
                         android:layout_width="60dp"
+                        android:layout_weight="1"
                         android:layout_height="60dp"
                         android:background="@drawable/outline_ad_24">
 
@@ -105,20 +110,14 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                <FrameLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/outline_ad_24"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp">
+
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/fyoo"
-                        app:tint="@android:color/holo_red_dark" />
-                </FrameLayout>
+                        android:layout_width="90dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="start"
+                        android:src="@drawable/hi"/>
+
                     <TextView
                         android:id="@+id/token"
                         android:layout_width="wrap_content"
@@ -127,19 +126,14 @@
                         android:textSize="17sp"
                         android:textColor="@color/black"/>
 
-                <FrameLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/outline_ad_24"
-                    android:layout_marginTop="30dp" >
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/fyoo"
-                        app:tint="@android:color/holo_red_dark" />
-                </FrameLayout>
+                        android:layout_width="100dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="start"
+
+                        android:src="@drawable/tol" />
+
 
                     <TextView
                         android:id="@+id/message"
@@ -183,9 +177,10 @@
                             app:cardElevation="6dp">
 
                             <TextView
+                                android:id="@+id/txtdepo"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Cleaning"
+                                android:text="Deposit token unit"
                                 android:textColor="#FFFFFF"
                                 android:textSize="16sp"
                                 android:gravity="center"/>
@@ -200,10 +195,11 @@
                             app:cardElevation="6dp">
 
                             <TextView
+                                android:id="@+id/txtshare"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="Plumbing"
+                                android:text="Share token unit"
                                 android:textColor="#FFFFFF"
                                 android:textSize="16sp" />
                         </com.google.android.material.card.MaterialCardView>
@@ -217,9 +213,10 @@
                             app:cardElevation="6dp">
 
                             <TextView
+                                android:id="@+id/txtview"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Electrical"
+                                android:text="View"
                                 android:textColor="#FFFFFF"
                                 android:textSize="16sp"
                                 android:gravity="center"/>
@@ -267,5 +264,22 @@
         </LinearLayout>
 
     </ScrollView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationZ="10dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:elevation="5dp">
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:id="@+id/bottomnav"
+        android:layout_height="wrap_content"
+        app:itemTextColor="@color/orange"
+        app:itemIconTint="@color/color_item_bottom_nav"
+        android:backgroundTint="@color/white"
+        app:menu="@menu/menubottom_nav"/>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

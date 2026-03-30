@@ -47,7 +47,7 @@ public class Message extends AppCompatActivity {
         mess=findViewById(R.id.emessage);
         btnsend=findViewById(R.id.send);
 
-        Intent intent = getIntent();
+        Intent intent = getIntent();//imports methods from tokenpage
 
         String meter = intent.getStringExtra("meter_key");
         String token = intent.getStringExtra("token_key");

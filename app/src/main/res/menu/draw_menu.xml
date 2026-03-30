@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+   <group
+       android:id="@+id/group1">
+
+       <item
+           android:icon="@drawable/baseline_menu_24"
+           android:id="@+id/menu"
+           android:title="Menu"/>
+       <item
+           android:icon="@drawable/baseline_history_24"
+           android:id="@+id/histo"
+           android:title="History"/>
+       <item
+           android:icon="@drawable/baseline_terminal_24"
+           android:id="@+id/Terms"
+           android:title="Terms and condition"/>
+
+   </group>
+    <group android:id="@+id/group2">
+        <item
+            android:icon="@drawable/baseline_feedback_24"
+            android:id="@+id/feedba"
+            android:title="Feddback"/>
+        <item
+            android:icon="@drawable/baseline_contact_support_24"
+            android:id="@+id/contact"
+            android:title="Contant us"/>
+
+
+    </group>
+    <group android:id="@+id/group3">
+        <item
+            android:icon="@drawable/baseline_share_24"
+            android:id="@+id/share"
+            android:title="Share"/>
+    </group>
+
+
+
+</menu>
