@@ -44,7 +44,7 @@ public class Tokenpage extends AppCompatActivity {
                 return;
             }
             if (getmeter .length()!=11){
-                Toast.makeText(this, "Meter number must be 11 digits ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "MeterModel number must be 11 digits ", Toast.LENGTH_SHORT).show();
                 return;
             }
 

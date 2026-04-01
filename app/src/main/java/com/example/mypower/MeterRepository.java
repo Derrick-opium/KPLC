@@ -1,0 +1,241 @@
+package com.example.mypower;
+
+import android.content.Context;
+import android.widget.Toast;
+
+import androidx.lifecycle.MutableLiveData;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MeterRepository {
+    private ApiService apiService;
+    private Dbhelper localDbHelper;
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
+
+    public MeterRepository(Context context) {
+        this.apiService = NetworkClient.getClient().create(ApiService.class);
+        this.localDbHelper = new Dbhelper(context);
+        isLoading.setValue(false);
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public MutableLiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
+    // Register new meter
+    public void registerMeter(String meterNumber, int initialUnits,
+                              final RepositoryCallback<Meter> callback) {
+        isLoading.setValue(true);
+
+        Meter meter = new Meter(meterNumber, initialUnits);
+
+        apiService.registerMeter(meter).enqueue(new Callback<ApiResponse<Meter>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Meter>> call,
+                                   Response<ApiResponse<Meter>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Meter> apiResponse = response.body();
+                    if (apiResponse.isSuccess()) {
+                        // Save to local SQLite as backup
+                        localDbHelper.insertdata(meterNumber, String.valueOf(initialUnits));
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        errorMessage.setValue(apiResponse.getMessage());
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    errorMessage.setValue("Server error");
+                    callback.onError("Server error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Meter>> call, Throwable t) {
+                isLoading.setValue(false);
+                errorMessage.setValue(t.getMessage());
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
+    // Add tokens to meter
+    public void addTokens(String meterNumber, int units,
+                          final RepositoryCallback<Meter> callback) {
+        isLoading.setValue(true);
+
+        TokenRequest request = new TokenRequest(meterNumber, units);
+
+        apiService.addTokens(request).enqueue(new Callback<ApiResponse<Meter>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Meter>> call,
+                                   Response<ApiResponse<Meter>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Meter> apiResponse = response.body();
+                    if (apiResponse.isSuccess()) {
+                        // Update local SQLite
+                        localDbHelper.updateMeterBalance(String.valueOf(units), meterNumber);
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        errorMessage.setValue(apiResponse.getMessage());
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    callback.onError("Failed to add tokens");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Meter>> call, Throwable t) {
+                isLoading.setValue(false);
+                errorMessage.setValue(t.getMessage());
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
+    // Get all meters
+    public void getAllMeters(final RepositoryCallback<List<Meter>> callback) {
+        isLoading.setValue(true);
+
+        apiService.getAllMeters().enqueue(new Callback<ApiResponse<List<Meter>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Meter>>> call,
+                                   Response<ApiResponse<List<Meter>>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<List<Meter>> apiResponse = response.body();
+                    if (apiResponse.isSuccess()) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    callback.onError("Failed to load meters");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Meter>>> call, Throwable t) {
+                isLoading.setValue(false);
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
+
+    // Get meter balance
+    public void getBalance(String meterNumber, final RepositoryCallback<Integer> callback) {
+        isLoading.setValue(true);
+
+        apiService.getBalance(meterNumber).enqueue(new Callback<ApiResponse<BalanceResponnse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<BalanceResponnse>> call,
+                                   Response<ApiResponse<BalanceResponnse>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<BalanceResponnse> apiResponse = response.body();
+                    if (apiResponse.isSuccess() && apiResponse.getData() != null) {
+                        callback.onSuccess(apiResponse.getData().getBalance());
+                    } else {
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    callback.onError("Failed to get balance");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<BalanceResponnse>> call, Throwable t) {
+                isLoading.setValue(false);
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
+    // Transfer tokens
+    public void transferTokens(String fromMeter, String toMeter, int units,
+                               final RepositoryCallback<Meter> callback) {
+        isLoading.setValue(true);
+
+        TransferRequest request = new TransferRequest(fromMeter, toMeter, units);
+
+        apiService.transferTokens(request).enqueue(new Callback<ApiResponse<Meter>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Meter>> call,
+                                   Response<ApiResponse<Meter>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Meter> apiResponse = response.body();
+                    if (apiResponse.isSuccess()) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    callback.onError("Transfer failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Meter>> call, Throwable t) {
+                isLoading.setValue(false);
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
+    // Update delivered units
+    public void updateDelivered(String meterNumber, int units,
+                                final RepositoryCallback<Meter> callback) {
+        isLoading.setValue(true);
+
+        apiService.updateDelivered(meterNumber, units).enqueue(new Callback<ApiResponse<Meter>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Meter>> call,
+                                   Response<ApiResponse<Meter>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Meter> apiResponse = response.body();
+                    if (apiResponse.isSuccess()) {
+                        // Update local SQLite
+                        localDbHelper.updateDeliver(meterNumber, String.valueOf(units));
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    callback.onError("Failed to update delivered units");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Meter>> call, Throwable t) {
+                isLoading.setValue(false);
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
+    public interface RepositoryCallback<T> {
+        void onSuccess(T data);
+        void onError(String error);
+    }
+}
+

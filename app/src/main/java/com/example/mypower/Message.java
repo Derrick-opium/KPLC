@@ -58,7 +58,7 @@ public class Message extends AppCompatActivity {
         if (amount == null) amount = "";
 
         String fullMessage =
-                "Meter: " + meter + "\n" +
+                "MeterModel: " + meter + "\n" +
                         "Amount: " + amount + "\n" +
                         "Units: " + token;
 
