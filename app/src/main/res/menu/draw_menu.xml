@@ -4,9 +4,9 @@
        android:id="@+id/group1">
 
        <item
-           android:icon="@drawable/baseline_menu_24"
+           android:icon="@drawable/baseline_logout_24"
            android:id="@+id/menu"
-           android:title="Menu"/>
+           android:title="Sign out"/>
        <item
            android:icon="@drawable/baseline_history_24"
            android:id="@+id/histo"
@@ -26,6 +26,10 @@
             android:icon="@drawable/baseline_contact_support_24"
             android:id="@+id/contact"
             android:title="Contant us"/>
+        <item
+            android:icon="@drawable/baseline_create_24"
+            android:id="@+id/account"
+            android:title="Create account"/>
 
 
     </group>

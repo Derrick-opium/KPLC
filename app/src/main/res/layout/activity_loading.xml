@@ -6,30 +6,86 @@
     android:id="@+id/main"
     android:orientation="vertical"
     android:gravity="center"
+    android:padding="32dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Loading">
 
-    <ImageView
-        android:layout_height="200dp"
-        android:layout_width="200dp"
-        android:background="@drawable/han"
-        />
-    <ProgressBar
-        android:layout_marginTop="20dp"
-        android:id="@+id/progets"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:progressDrawable="@android:drawable/progress_horizontal"
-        android:progress="0"
-        android:indeterminate="false"/>
+
+    <FrameLayout
+        android:layout_width="160dp"
+        android:layout_height="160dp">
+        <View
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:background="@drawable/han"/>
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:background="@drawable/han"
+            android:scaleType="centerCrop"
+            android:padding="4dp"/>
+    </FrameLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="loading......."
-        android:layout_marginTop="20dp"
-        android:textColor="@color/green"
-        android:textSize="20dp"/>
+        android:text="Please wait while we load your data"
+        android:textColor="#64748B"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:layout_marginTop="6dp"/>
+
+
+    <FrameLayout
+        android:layout_width="280dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="32dp">
+
+        <!-- Track background -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/progress_track"/>
+
+        <!-- Filled progress -->
+        <ProgressBar
+            android:id="@+id/progets"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:progressDrawable="@drawable/progress_fill"
+            android:progress="0"
+            android:max="100"
+            android:indeterminate="false"/>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tvLoadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading..."
+            android:textColor="#818CF8"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  0%"
+            android:textColor="#475569"
+            android:textSize="13sp"
+            android:layout_marginStart="8dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>
