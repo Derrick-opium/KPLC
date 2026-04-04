@@ -7,7 +7,7 @@ import java.util.List;
 public interface ApiService {
 
     // Get all meters
-    @GET("allData")
+    @GET("alldata")
     Call<ApiResponse<List<Meter>>> getAllMeters();
 
     // Get meter by number

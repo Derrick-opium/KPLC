@@ -4,16 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 public class MainActivity extends AppCompatActivity {
    // ViewPager2 viewPager2;
-    TextView txtoken,txtmessage;
+    FrameLayout txtoken,txtmessage,meter,unit,viw;
+    //TextView ;
     DrawerLayout drawerLayout;
     ImageButton buttontoggle;
-    TextView meter,unit,viw;
+    //TextView ;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -24,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
         //viewPager2.setAdapter(new Viewpage(this));
         txtoken=findViewById(R.id.token);
         meter=findViewById(R.id.txtdepo);
-        unit=findViewById(R.id.txtshare);
+        unit=findViewById(R.id.txtshares);
         viw=findViewById(R.id.txtview);
         buttontoggle=findViewById(R.id.btntoggle);
         drawerLayout=findViewById(R.id.drwablelayou);
-        txtmessage=findViewById(R.id.message);
+        txtmessage=findViewById(R.id.messages);
 
         txtoken.setOnClickListener(v -> {
             Intent myintent=new Intent(MainActivity.this,Tokenpage.class);
