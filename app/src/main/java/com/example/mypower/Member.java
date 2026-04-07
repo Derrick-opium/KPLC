@@ -6,10 +6,10 @@ public class Member {
 
     private int id;
 
-    @SerializedName("full_name")       // ← tells Gson to send "user" to the server
+    @SerializedName("full_name")
     private String Username;
 
-    @SerializedName("password")   // ← tells Gson to send "password"
+    @SerializedName("password")
     private String password;
 
     public Member(String users, String pass) {

@@ -2,10 +2,8 @@ package com.example.mypower;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +17,7 @@ public class Login_form extends AppCompatActivity {
     EditText name, passo;
     Button login;
     MeterRepository meterRepository;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,51 +31,63 @@ public class Login_form extends AppCompatActivity {
         login = findViewById(R.id.btnlog);
 
         meterRepository = new MeterRepository(this);
+        sessionManager = new SessionManager(this);
+
+        // If already logged in, skip login screen
+        if (sessionManager.isLoggedIn()) {
+            goToMain();
+            return;
+        }
 
         login.setOnClickListener(v -> {
             String fname = name.getText().toString().trim();
             String password = passo.getText().toString().trim();
-
 
             if (fname.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Check network
             if (!NetworkClient.isNetworkAvailable(this)) {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Disable button to prevent double click
+            if (fname.length() < 3) {
+                name.setError("Username must be at least 3 characters");
+                name.requestFocus();
+                return;
+            }
+
+            // ✅ Password length check
+            if (password.length() < 6) {
+                passo.setError("Password must be at least 6 characters");
+                passo.requestFocus();
+                return;
+            }
+
             login.setEnabled(false);
-            // progressBar.setVisibility(View.VISIBLE);
 
             meterRepository.loginUser(fname, password, new MeterRepository.RepositoryCallback<Member>() {
 
                 @Override
                 public void onSuccess(Member data) {
-                    // progressBar.setVisibility(View.GONE);
                     login.setEnabled(true);
 
+                    // ✅ Fixed - only pass username
+                    sessionManager.createSession(data.getUsername());
+
                     Toast.makeText(Login_form.this,
-                            "Welcome " + fname + "!",
+                            "Welcome " + data.getUsername() + "!",
                             Toast.LENGTH_SHORT).show();
 
-                    // Navigate to MainActivity and clear back stack
-                    Intent intent = new Intent(Login_form.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    goToMain();
                 }
 
                 @Override
                 public void onError(String error) {
-
                     login.setEnabled(true);
 
-                    // Show specific error messages
                     if (error.contains("User not found")) {
                         Toast.makeText(Login_form.this,
                                 "Account not found. Please sign up first.",
@@ -98,5 +109,12 @@ public class Login_form extends AppCompatActivity {
             Intent intent1 = new Intent(Login_form.this, Signup_form.class);
             startActivity(intent1);
         });
+    }
+
+    private void goToMain() {
+        Intent intent = new Intent(Login_form.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

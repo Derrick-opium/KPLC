@@ -16,6 +16,7 @@ public class Signup_form extends AppCompatActivity {
     EditText name, password;
     Button btnsingup;
     MeterRepository signin;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,15 @@ public class Signup_form extends AppCompatActivity {
         btnsingup = findViewById(R.id.btnsign);
 
         signin = new MeterRepository(this);
+        sessionManager = new SessionManager(this);
+
+
+
+        // If already logged in, skip login screen
+        if (sessionManager.isLoggedIn()) {
+            goToMain();
+            return;
+        }
 
         btnsingup.setOnClickListener(v -> {
             String snname = name.getText().toString().trim();
@@ -72,5 +82,11 @@ public class Signup_form extends AppCompatActivity {
             Intent intex = new Intent(Signup_form.this, Login_form.class);
             startActivity(intex);
         });
+    }
+    private void goToMain() {
+        Intent intent = new Intent(Signup_form.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
