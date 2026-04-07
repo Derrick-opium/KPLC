@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:orientation="vertical"
+    android:background="@color/light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View_list">
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnlis"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="130dp"
-        android:textSize="20sp"
-        android:text="VIEW USERS"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        />
-    <Button
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="24dp"
+        android:text="View users"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#1A73E8"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/baseline_bolt_24"
+        app:iconGravity="textStart"/>
+
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnbck"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="160dp"
-        android:textSize="20sp"
-        android:layout_row="1"
-        android:layout_column="0"
-        android:text="BACK"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="24dp"
+        android:text="Back"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@android:color/transparent"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/baseline_bolt_24"
+        app:iconGravity="textStart"/>
     <ListView
         android:id="@+id/ls1"
         android:layout_row="2"
@@ -37,4 +47,4 @@
         android:layout_height="wrap_content"
         />
 
-</GridLayout>
+</LinearLayout>

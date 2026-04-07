@@ -1,6 +1,7 @@
 package com.example.mypower;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
@@ -105,6 +106,113 @@ public class MeterRepository {
             }
         });
     }
+
+
+    public void registerUser(String user, String password, final RepositoryCallback<Member> callback) {
+        isLoading.setValue(true);
+        Member Useres = new Member(user, password);
+
+        apiService.registerUser(Useres).enqueue(new Callback<ApiResponse<Member>>() {
+
+            @Override
+            public void onResponse(Call<ApiResponse<Member>> call, Response<ApiResponse<Member>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Member> apiResponse = response.body();
+
+                    if (apiResponse.isSuccess()) {
+                        // Save to local db
+                        localDbHelper.insertdata(user, password);
+                        callback.onSuccess(apiResponse.getData());
+
+                    } else {
+                        // Server returned success=false with a message
+                        Log.e("REGISTER_ERROR", "API error: " + apiResponse.getMessage());
+                        errorMessage.setValue(apiResponse.getMessage());
+                        callback.onError(apiResponse.getMessage());
+                    }
+
+                } else {
+
+                    String errorBody = "Server error: " + response.code();
+                    try {
+                        if (response.errorBody() != null) {
+                            errorBody = response.errorBody().string();
+                            Log.e("REGISTER_ERROR", "Error body: " + errorBody);
+                        }
+                    } catch (Exception e) {
+                        Log.e("REGISTER_ERROR", "Could not read error body: " + e.getMessage());
+                    }
+                    errorMessage.setValue(errorBody);
+                    callback.onError(errorBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Member>> call, Throwable t) {
+                isLoading.setValue(false);
+                String failMsg = t.getMessage() != null ? t.getMessage() : "Network failure, check your connection";
+                Log.e("REGISTER_ERROR", "onFailure: " + failMsg);
+                errorMessage.setValue(failMsg);
+                callback.onError(failMsg);
+            }
+        });
+    }
+    //login user method
+
+    public void loginUser(String full_name, String password, final RepositoryCallback<Member> callback) {
+        isLoading.setValue(true);
+        Member loginMember = new Member(full_name, password);
+
+        apiService.loginuser(loginMember).enqueue(new Callback<ApiResponse<Member>>() {
+
+            @Override
+            public void onResponse(Call<ApiResponse<Member>> call, Response<ApiResponse<Member>> response) {
+                isLoading.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Member> apiResponse = response.body();
+
+                    if (apiResponse.isSuccess()) {
+                        // Save session to local db
+                        localDbHelper.insertdata(full_name, password);
+                        Log.d("LOGIN", "✅ Login successful: " + full_name);
+                        callback.onSuccess(apiResponse.getData());
+
+                    } else {
+                        Log.e("LOGIN_ERROR", "Login failed: " + apiResponse.getMessage());
+                        errorMessage.setValue(apiResponse.getMessage());
+                        callback.onError(apiResponse.getMessage());
+                    }
+
+                } else {
+                    String errorBody = "Server error: " + response.code();
+                    try {
+                        if (response.errorBody() != null) {
+                            errorBody = response.errorBody().string();
+                            Log.e("LOGIN_ERROR", "Error body: " + errorBody);
+                        }
+                    } catch (Exception e) {
+                        Log.e("LOGIN_ERROR", "Could not read error body: " + e.getMessage());
+                    }
+                    errorMessage.setValue(errorBody);
+                    callback.onError(errorBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Member>> call, Throwable t) {
+                isLoading.setValue(false);
+                String failMsg = t.getMessage() != null ? t.getMessage() : "Network failure, check your connection";
+                Log.e("LOGIN_ERROR", "onFailure: " + failMsg);
+                errorMessage.setValue(failMsg);
+                callback.onError(failMsg);
+            }
+        });
+    }
+
+
 
     // Get all meters
     public void getAllMeters(final RepositoryCallback<List<Meter>> callback) {

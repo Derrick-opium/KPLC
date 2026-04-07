@@ -18,30 +18,38 @@ public interface ApiService {
     @POST("deposit")
     Call<ApiResponse<Meter>> registerMeter(@Body Meter meter);
 
+    // Fix: was "getuser" → must be "register" to match server
+    @POST("register")
+    Call<ApiResponse<Member>> registerUser(@Body Member useres);
+    //loginusers
+
+    @POST("login")
+    Call<ApiResponse<Member>> loginuser(@Body Member member);
+
     // Add tokens to meter
     @POST("meters/add-token")
     Call<ApiResponse<Meter>> addTokens(@Body TokenRequest request);
 
-    // Transfer tokens between meters
-    @POST("api/meters/transfer")
+    // Transfer tokens between meters — Fix: remove leading /api/ (BASE_URL already has /api/)
+    @POST("meters/transfer")
     Call<ApiResponse<Meter>> transferTokens(@Body TransferRequest request);
 
-    // Get meter balance
-    @GET("api/meters/{meter_number}/balance")
+    // Get meter balance — Fix: remove leading /api/
+    @GET("meters/{meter_number}/balance")
     Call<ApiResponse<BalanceResponnse>> getBalance(@Path("meter_number") String meterNumber);
 
-    // Update delivered units
-    @PUT("api/meters/{meter_number}/deliver")
+    // Update delivered units — Fix: remove leading /api/
+    @PUT("meters/{meter_number}/deliver")
     Call<ApiResponse<Meter>> updateDelivered(
             @Path("meter_number") String meterNumber,
             @Query("units") int units
     );
 
-    // Hello endpoint (for testing)
-    @GET("api/hello")
+    // Hello endpoint — Fix: remove leading /api/
+    @GET("hello")
     Call<MessageResponse> getHello();
 
-    // Get message endpoint
-    @GET("api/items")
+    // Get items endpoint — Fix: remove leading /api/
+    @GET("items")
     Call<MessageResponse> getMessage();
 }

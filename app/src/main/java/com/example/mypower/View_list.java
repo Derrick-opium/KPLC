@@ -42,12 +42,11 @@ public class View_list extends AppCompatActivity {
             return;
         }
 
-        //progressBar.setVisibility(View.VISIBLE);
+
 
         repository.getAllMeters(new MeterRepository.RepositoryCallback<List<Meter>>() {
             @Override
             public void onSuccess(List<Meter> data) {
-                //progressBar.setVisibility(View.GONE);
 
                 if (data == null || data.isEmpty()) {
                     Toast.makeText(View_list.this, "No meters found", Toast.LENGTH_SHORT).show();

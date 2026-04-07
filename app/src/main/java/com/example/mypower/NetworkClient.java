@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class NetworkClient {
     private static Retrofit retrofit = null;
-    private static final String BASE_URL = "http://192.168.0.164:3000/api/"; // Change to your server IP
+    private static final String BASE_URL = "http://192.168.0.100:3000/api/"; // Change to your server IP
 
     public static Retrofit getClient() {
         if (retrofit == null) {

@@ -9,43 +9,68 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class Signup_form extends AppCompatActivity {
+
     TextView txtlogin;
-    EditText name,password;
+    EditText name, password;
     Button btnsingup;
+    MeterRepository signin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup_form);
 
-        txtlogin=findViewById(R.id.log);
-        name=findViewById(R.id.edname);
-        password=findViewById(R.id.edpassword);
-        btnsingup=findViewById(R.id.btnsign);
+        txtlogin = findViewById(R.id.log);
+        name = findViewById(R.id.edname);
+        password = findViewById(R.id.edpassword);
+        btnsingup = findViewById(R.id.btnsign);
 
+        signin = new MeterRepository(this);
 
         btnsingup.setOnClickListener(v -> {
-            String snname=name.getText().toString().trim();
-            String sspass=password.getText().toString().trim();
+            String snname = name.getText().toString().trim();
+            String sspass = password.getText().toString().trim();
 
-            if (snname.isEmpty() || sspass.isEmpty()){
-                Toast.makeText(this, "fill all fields", Toast.LENGTH_SHORT).show();
+
+            if (snname.isEmpty() || sspass.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                return;
             }
-            else {
-                Intent myinten=new Intent(Signup_form.this,Login_form.class);
-                startActivity(myinten);
+
+            if (NetworkClient.isNetworkAvailable(this)) {
+                signin.registerUser(snname, sspass, new MeterRepository.RepositoryCallback<Member>() {
+
+                    @Override
+                    public void onSuccess(Member data) {
+
+                        Toast.makeText(Signup_form.this,
+                                "User registered successfully!",
+                                Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(Signup_form.this, Login_form.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(Signup_form.this,
+                                "Error: " + error, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            } else {
+                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
             }
         });
 
         txtlogin.setOnClickListener(v -> {
-            Intent intex=new Intent(Signup_form.this,Login_form.class);
+            Intent intex = new Intent(Signup_form.this, Login_form.class);
             startActivity(intex);
         });
-
     }
 }
