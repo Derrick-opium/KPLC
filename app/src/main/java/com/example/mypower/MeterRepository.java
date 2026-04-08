@@ -162,27 +162,33 @@ public class MeterRepository {
     //login user method
 
     public void loginUser(String full_name, String password, final RepositoryCallback<Member> callback) {
-        isLoading.setValue(true);
+
+        // ✅ Use postValue() instead of setValue() — works on any thread
+        isLoading.postValue(true);
+
         Member loginMember = new Member(full_name, password);
 
         apiService.loginuser(loginMember).enqueue(new Callback<ApiResponse<Member>>() {
 
             @Override
             public void onResponse(Call<ApiResponse<Member>> call, Response<ApiResponse<Member>> response) {
-                isLoading.setValue(false);
+                isLoading.postValue(false); // ✅ postValue not setValue
 
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<Member> apiResponse = response.body();
 
                     if (apiResponse.isSuccess()) {
-                        // Save session to local db
-                        localDbHelper.insertdata(full_name, password);
+                        // ✅ Run DB insert on background thread so it doesn't block callback
+                        new Thread(() -> {
+                            localDbHelper.insertdata(full_name, password);
+                        }).start();
+
                         Log.d("LOGIN", "✅ Login successful: " + full_name);
                         callback.onSuccess(apiResponse.getData());
 
                     } else {
                         Log.e("LOGIN_ERROR", "Login failed: " + apiResponse.getMessage());
-                        errorMessage.setValue(apiResponse.getMessage());
+                        errorMessage.postValue(apiResponse.getMessage()); // ✅ postValue
                         callback.onError(apiResponse.getMessage());
                     }
 
@@ -196,23 +202,21 @@ public class MeterRepository {
                     } catch (Exception e) {
                         Log.e("LOGIN_ERROR", "Could not read error body: " + e.getMessage());
                     }
-                    errorMessage.setValue(errorBody);
+                    errorMessage.postValue(errorBody); // ✅ postValue
                     callback.onError(errorBody);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Member>> call, Throwable t) {
-                isLoading.setValue(false);
+                isLoading.postValue(false); // ✅ postValue
                 String failMsg = t.getMessage() != null ? t.getMessage() : "Network failure, check your connection";
                 Log.e("LOGIN_ERROR", "onFailure: " + failMsg);
-                errorMessage.setValue(failMsg);
+                errorMessage.postValue(failMsg); // ✅ postValue
                 callback.onError(failMsg);
             }
         });
     }
-
-
 
     // Get all meters
     public void getAllMeters(final RepositoryCallback<List<Meter>> callback) {

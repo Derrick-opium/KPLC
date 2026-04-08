@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Login_form extends AppCompatActivity {
 
     TextView txcrateaccount;
-
     EditText name, passo;
     Button login;
     MeterRepository meterRepository;
@@ -25,23 +24,32 @@ public class Login_form extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_form);
 
+        sessionManager = new SessionManager(this);
+
+        // ✅ Clear any corrupt/stuck session
+        if (sessionManager.isLoggedIn()) {
+            if (sessionManager.getUsername() != null && !sessionManager.getUsername().isEmpty()) {
+                goToMain();
+                return;
+            } else {
+                // ✅ Corrupt session - clear it and stay on login
+                sessionManager.logout();
+            }
+        }
+
         txcrateaccount = findViewById(R.id.crtaccoun);
         name = findViewById(R.id.logname);
         passo = findViewById(R.id.logpassord);
         login = findViewById(R.id.btnlog);
 
         meterRepository = new MeterRepository(this);
-        sessionManager = new SessionManager(this);
-
-        // If already logged in, skip login screen
-        if (sessionManager.isLoggedIn()) {
-            goToMain();
-            return;
-        }
 
         login.setOnClickListener(v -> {
             String fname = name.getText().toString().trim();
             String password = passo.getText().toString().trim();
+
+            android.util.Log.d("LOGIN", "Button clicked");
+            android.util.Log.d("LOGIN", "Username: " + fname);
 
             if (fname.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
@@ -59,7 +67,6 @@ public class Login_form extends AppCompatActivity {
                 return;
             }
 
-            // ✅ Password length check
             if (password.length() < 6) {
                 passo.setError("Password must be at least 6 characters");
                 passo.requestFocus();
@@ -72,35 +79,37 @@ public class Login_form extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(Member data) {
-                    login.setEnabled(true);
-
-                    // ✅ Fixed - only pass username
-                    sessionManager.createSession(data.getUsername());
-
-                    Toast.makeText(Login_form.this,
-                            "Welcome " + data.getUsername() + "!",
-                            Toast.LENGTH_SHORT).show();
-
-                    goToMain();
+                    android.util.Log.d("LOGIN", "onSuccess: " + data.getUsername());
+                    runOnUiThread(() -> {
+                        login.setEnabled(true);
+                        sessionManager.createSession(data.getUsername());
+                        Toast.makeText(Login_form.this,
+                                "Welcome " + data.getUsername() + "!",
+                                Toast.LENGTH_SHORT).show();
+                        goToMain();
+                    });
                 }
 
                 @Override
                 public void onError(String error) {
-                    login.setEnabled(true);
+                    android.util.Log.e("LOGIN", "onError: " + error);
+                    runOnUiThread(() -> {
+                        login.setEnabled(true);
 
-                    if (error.contains("User not found")) {
-                        Toast.makeText(Login_form.this,
-                                "Account not found. Please sign up first.",
-                                Toast.LENGTH_LONG).show();
-                    } else if (error.contains("Incorrect password")) {
-                        Toast.makeText(Login_form.this,
-                                "Incorrect password. Please try again.",
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(Login_form.this,
-                                "Login failed: " + error,
-                                Toast.LENGTH_LONG).show();
-                    }
+                        if (error.contains("User not found")) {
+                            Toast.makeText(Login_form.this,
+                                    "Account not found. Please sign up first.",
+                                    Toast.LENGTH_LONG).show();
+                        } else if (error.contains("Incorrect password")) {
+                            Toast.makeText(Login_form.this,
+                                    "Incorrect password. Please try again.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(Login_form.this,
+                                    "Login failed: " + error,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             });
         });
