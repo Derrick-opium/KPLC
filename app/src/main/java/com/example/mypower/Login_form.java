@@ -82,7 +82,10 @@ public class Login_form extends AppCompatActivity {
                     android.util.Log.d("LOGIN", "onSuccess: " + data.getUsername());
                     runOnUiThread(() -> {
                         login.setEnabled(true);
-                        sessionManager.createSession(data.getUsername());
+
+                        // ← Pass both username AND member_id
+                        sessionManager.createSession(data.getUsername(), data.getId());
+
                         Toast.makeText(Login_form.this,
                                 "Welcome " + data.getUsername() + "!",
                                 Toast.LENGTH_SHORT).show();

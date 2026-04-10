@@ -16,7 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    FrameLayout txtoken, txtmessage, meter, unit, viw;
+    FrameLayout txtoken, txtmessage, meter, unit, viw,stmtr;
     DrawerLayout drawerLayout;
     ImageButton buttontoggle;
     TextView tvUsername;
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ✅ Find all views FIRST
         txtoken = findViewById(R.id.token);
+        stmtr=findViewById(R.id.mtrset);
         meter = findViewById(R.id.txtdepo);
         unit = findViewById(R.id.txtshares);
         viw = findViewById(R.id.txtview);
@@ -88,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
 
         meter.setOnClickListener(v -> {
             Intent myintent = new Intent(MainActivity.this, Deposit_token.class);
+            startActivity(myintent);
+        });
+
+        stmtr.setOnClickListener(v -> {
+            Intent myintent = new Intent(MainActivity.this, Set_Meter.class);
             startActivity(myintent);
         });
 

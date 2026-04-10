@@ -2,35 +2,334 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Message">
+    android:orientation="vertical"
+    android:background="#F0F4FF">
 
-    <EditText
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="NUMBER"
-        android:layout_marginTop="40dp"
-        android:id="@+id/ephone"
-        android:inputType="phone"
-        />
-    <EditText
-        android:id="@+id/emessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="MESSAGE"
-        android:layout_marginTop="40dp"
-        android:inputType="textMultiLine"
-        android:gravity="top"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send sms"
-        android:id="@+id/send"
-        android:layout_marginTop="30dp"/>
+        android:orientation="vertical"
+        android:background="#1E3A5F"
+        android:padding="20dp">
 
+        <!-- Top row: back button + title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:background="@drawable/circle_amber"
+                android:padding="8dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Message"
+                    android:textColor="#99FFFFFF"
+                    android:textSize="11sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send SMS"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Avatar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingBottom="8dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#F59E0B">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/round_person_24"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recipient"
+                android:textColor="#CCFFFFFF"
+                android:textSize="13sp"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Scrollable body -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Phone number label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PHONE NUMBER"
+                android:textColor="#94A3B8"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:layout_marginBottom="6dp"/>
+
+            <!-- Phone number field -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_bg"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#E6F1FB">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_phone_24"
+                        app:tint="#185FA5"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- ✅ Fix 1: removed android:hintTextColor -->
+                <EditText
+                    android:id="@+id/ephone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:hint="+254 700 000 000"
+                    android:textColor="#1E3A5F"
+                    android:textSize="14sp"
+                    android:inputType="phone"
+                    android:background="@null"
+                    android:singleLine="true"/>
+
+            </LinearLayout>
+
+            <!-- Message label row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MESSAGE"
+                    android:textColor="#94A3B8"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.08"/>
+
+                <TextView
+                    android:id="@+id/tvCharCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 / 160"
+                    android:textColor="#94A3B8"
+                    android:textSize="11sp"/>
+
+            </LinearLayout>
+
+            <!-- Message field -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/input_bg"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#EEEDFE">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/baseline_message_24"
+                        app:tint="#534AB7"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- ✅ Fix 2: removed android:hintTextColor -->
+                <EditText
+                    android:id="@+id/emessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:hint="Type your message here..."
+                    android:textColor="#1E3A5F"
+                    android:textSize="14sp"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:minLines="4"
+                    android:maxLines="6"
+                    android:maxLength="160"
+                    android:background="@null"/>
+
+            </LinearLayout>
+
+            <!-- Quick Messages label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QUICK MESSAGES"
+                android:textColor="#94A3B8"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Quick message chips -->
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:id="@+id/chipToken"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Token ready"
+                    android:textColor="#0F6E56"
+                    android:textSize="12sp"
+                    android:background="@drawable/chip_green"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/chipPayment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment received"
+                    android:textColor="#3C3489"
+                    android:textSize="12sp"
+                    android:background="@drawable/chip_purple"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/chipBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Low balance"
+                    android:textColor="#633806"
+                    android:textSize="12sp"
+                    android:background="@drawable/chip_amber"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- ✅ Fix 3: changed @color/red to @drawable/chip_red -->
+                <TextView
+                    android:id="@+id/chipMaintenance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maintenance"
+                    android:textColor="#993C1D"
+                    android:textSize="12sp"
+                    android:background="@color/red"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_marginBottom="8dp"/>
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <!-- Send button -->
+            <Button
+                android:id="@+id/send"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Send SMS"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:backgroundTint="#1E3A5F"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Status message -->
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:padding="10dp"
+                android:layout_marginBottom="8dp"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

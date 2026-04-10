@@ -1,23 +1,17 @@
 package com.example.mypower;
 
 public class TokenRequest {
-    private String meter_number;
-    private int units;
-    private double amount;
+    private int token_units;
+    private int member_id;
 
-    public TokenRequest(String meter_number, int units) {
-        this.meter_number = meter_number;
-        this.units = units;
-        //this.amount = amount;
+    public TokenRequest(int token_units, int member_id) {
+        this.token_units = token_units; // ← was wrongly assigned to meter_number
+        this.member_id   = member_id;  // ← was wrongly assigned to token_units
     }
 
-    public String getMeter_number() { return meter_number; }
-    public void setMeter_number(String meter_number) { this.meter_number = meter_number; }
+    public int getToken_units() { return token_units; }
+    public void setToken_units(int token_units) { this.token_units = token_units; }
 
-    public int getUnits() { return units; }
-    public void setUnits(int units) { this.units = units; }
-
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
+    public int getMember_id() { return member_id; }
+    public void setMember_id(int member_id) { this.member_id = member_id; }
 }
-

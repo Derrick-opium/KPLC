@@ -18,6 +18,9 @@
         android:theme="@style/Theme.MyPower"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Set_Meter"
+            android:exported="false" />
+        <activity
             android:name=".Login_form"
             android:exported="false" />
         <activity

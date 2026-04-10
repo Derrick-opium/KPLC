@@ -1,7 +1,7 @@
 package com.example.mypower;
+
 import retrofit2.Call;
 import retrofit2.http.*;
-
 import java.util.List;
 
 public interface ApiService {
@@ -18,38 +18,42 @@ public interface ApiService {
     @POST("deposit")
     Call<ApiResponse<Meter>> registerMeter(@Body Meter meter);
 
-    // Fix: was "getuser" → must be "register" to match server
+    // Set meter number
+    @POST("set_meter")
+    Call<ApiResponse<Recievemtr>> setMeter(@Body Recievemtr body);
+
+    // Register user
     @POST("register")
     Call<ApiResponse<Member>> registerUser(@Body Member useres);
-    //loginusers
 
+    // Login user
     @POST("login")
     Call<ApiResponse<Member>> loginuser(@Body Member member);
 
-    // Add tokens to meter
-    @POST("meters/add-token")
+    // Add tokens
+    @POST("add_tokens")
     Call<ApiResponse<Meter>> addTokens(@Body TokenRequest request);
 
-    // Transfer tokens between meters — Fix: remove leading /api/ (BASE_URL already has /api/)
-    @POST("meters/transfer")
+    // Transfer tokens
+    @POST("transfer")
     Call<ApiResponse<Meter>> transferTokens(@Body TransferRequest request);
 
-    // Get meter balance — Fix: remove leading /api/
+    // Get meter balance
     @GET("meters/{meter_number}/balance")
     Call<ApiResponse<BalanceResponnse>> getBalance(@Path("meter_number") String meterNumber);
 
-    // Update delivered units — Fix: remove leading /api/
+    // Update delivered units
     @PUT("meters/{meter_number}/deliver")
     Call<ApiResponse<Meter>> updateDelivered(
             @Path("meter_number") String meterNumber,
             @Query("units") int units
     );
 
-    // Hello endpoint — Fix: remove leading /api/
+    // Hello endpoint
     @GET("hello")
     Call<MessageResponse> getHello();
 
-    // Get items endpoint — Fix: remove leading /api/
+    // Get items
     @GET("items")
     Call<MessageResponse> getMessage();
 }

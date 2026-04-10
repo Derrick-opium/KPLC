@@ -482,6 +482,7 @@
                                         android:orientation="vertical"
                                         android:padding="12dp">
                                         <FrameLayout
+                                            android:id="@+id/mtrset"
                                             android:layout_width="34dp"
                                             android:layout_height="34dp"
                                             android:background="@drawable/serv_icon_whi">
@@ -494,7 +495,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Gardening"
+                                            android:text="Set meter"
                                             android:textColor="#FFFFFF"
                                             android:textSize="12sp"
                                             android:textStyle="bold"

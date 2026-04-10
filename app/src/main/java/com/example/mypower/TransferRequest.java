@@ -1,23 +1,42 @@
 package com.example.mypower;
 
-public class TransferRequest {
-    private String from_meter;
-    private String to_meter;
-    private int units;
+import com.google.gson.annotations.SerializedName;
 
-    public TransferRequest(String from_meter, String to_meter, int units) {
-        this.from_meter = from_meter;
-        this.to_meter = to_meter;
+public class TransferRequest {
+
+    @SerializedName("member_id")
+    private int memberId;
+
+    @SerializedName("receiver_meter_number")
+    private String receiverMeterNumber;
+
+    @SerializedName("units")
+    private double units;
+
+    public TransferRequest(int memberId, String receiverMeterNumber, double units) {
+        this.memberId = memberId;
+        this.receiverMeterNumber = receiverMeterNumber;
         this.units = units;
     }
 
-    public String getFrom_meter() { return from_meter; }
-    public void setFrom_meter(String from_meter) { this.from_meter = from_meter; }
+    public int getMemberId() {
+        return memberId;
+    }
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
+    }
 
-    public String getTo_meter() { return to_meter; }
-    public void setTo_meter(String to_meter) { this.to_meter = to_meter; }
+    public String getReceiverMeterNumber() {
+        return receiverMeterNumber;
+    }
+    public void setReceiverMeterNumber(String receiverMeterNumber) {
+        this.receiverMeterNumber = receiverMeterNumber;
+    }
 
-    public int getUnits() { return units; }
-    public void setUnits(int units) { this.units = units; }
+    public double getUnits() {
+        return units;
+    }
+    public void setUnits(double units) {
+        this.units = units;
+    }
 }
-

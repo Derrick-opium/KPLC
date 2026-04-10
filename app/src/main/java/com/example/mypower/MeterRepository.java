@@ -6,6 +6,8 @@ import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -71,11 +73,11 @@ public class MeterRepository {
     }
 
     // Add tokens to meter
-    public void addTokens(String meterNumber, int units,
+    public void addTokens(int units, int memberId,
                           final RepositoryCallback<Meter> callback) {
         isLoading.setValue(true);
 
-        TokenRequest request = new TokenRequest(meterNumber, units);
+        TokenRequest request = new TokenRequest(units, memberId);
 
         apiService.addTokens(request).enqueue(new Callback<ApiResponse<Meter>>() {
             @Override
@@ -86,8 +88,14 @@ public class MeterRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<Meter> apiResponse = response.body();
                     if (apiResponse.isSuccess()) {
-                        // Update local SQLite
-                        localDbHelper.updateMeterBalance(String.valueOf(units), meterNumber);
+                        // Get meter number and balance from server response
+                        String meterNumber = apiResponse.getData().getMeter_number();
+                        double newBalance     = apiResponse.getData().getToken_units();
+
+                        // Update local SQLite with correct values
+                        localDbHelper.updateMeterBalance(
+                                String.valueOf(newBalance), meterNumber);
+
                         callback.onSuccess(apiResponse.getData());
                     } else {
                         errorMessage.setValue(apiResponse.getMessage());
@@ -100,6 +108,41 @@ public class MeterRepository {
 
             @Override
             public void onFailure(Call<ApiResponse<Meter>> call, Throwable t) {
+                isLoading.setValue(false);
+                errorMessage.setValue(t.getMessage());
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
+
+
+    public void setMeter(int memberId, String meterNumber,
+                         final RepositoryCallback<String> callback) {
+        isLoading.setValue(true);
+
+        Recievemtr body = new Recievemtr(memberId, meterNumber);
+
+        apiService.setMeter(body).enqueue(new Callback<ApiResponse<Recievemtr>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Recievemtr>> call,
+                                   Response<ApiResponse<Recievemtr>> response) {
+                isLoading.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Recievemtr> apiResponse = response.body();
+                    if (apiResponse.isSuccess()) {
+                        callback.onSuccess(meterNumber);
+                    } else {
+                        errorMessage.setValue(apiResponse.getMessage());
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    callback.onError("Failed to set meter number");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Recievemtr>> call, Throwable t) {
                 isLoading.setValue(false);
                 errorMessage.setValue(t.getMessage());
                 callback.onError(t.getMessage());
@@ -280,26 +323,27 @@ public class MeterRepository {
     }
 
     // Transfer tokens
-    public void transferTokens(String fromMeter, String toMeter, int units,
+    public void transferTokens(int memberId, String receiverMeter, double units,
                                final RepositoryCallback<Meter> callback) {
         isLoading.setValue(true);
 
-        TransferRequest request = new TransferRequest(fromMeter, toMeter, units);
+        TransferRequest request = new TransferRequest(memberId, receiverMeter, units);
 
         apiService.transferTokens(request).enqueue(new Callback<ApiResponse<Meter>>() {
             @Override
             public void onResponse(Call<ApiResponse<Meter>> call,
                                    Response<ApiResponse<Meter>> response) {
                 isLoading.setValue(false);
-
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<Meter> apiResponse = response.body();
                     if (apiResponse.isSuccess()) {
                         callback.onSuccess(apiResponse.getData());
                     } else {
+                        errorMessage.setValue(apiResponse.getMessage());
                         callback.onError(apiResponse.getMessage());
                     }
                 } else {
+                    errorMessage.setValue("Transfer failed");
                     callback.onError("Transfer failed");
                 }
             }
@@ -307,7 +351,9 @@ public class MeterRepository {
             @Override
             public void onFailure(Call<ApiResponse<Meter>> call, Throwable t) {
                 isLoading.setValue(false);
-                callback.onError(t.getMessage());
+                String msg = t.getMessage() != null ? t.getMessage() : "Unknown error";
+                errorMessage.setValue(msg);
+                callback.onError(msg);
             }
         });
     }
